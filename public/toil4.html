@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Toilsome — AI Task Automation Platform</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- NAVIGATION -->
+  <header class="site-header">
+    <nav class="container nav">
+      <a href="#" class="logo">Toilsome</a>
+      <ul class="nav-links">
+        <li><a href="#assessment">Assess Task</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>Automate Your Worst Tasks</h1>
+      <p>Discover how AI can save you hours each week—no coding required.</p>
+      <button onclick="document.getElementById('assessment').scrollIntoView({ behavior: 'smooth' })" class="btn-primary">
+        Get Started
+      </button>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features container">
+    <div class="feature-card">
+      <h3>Assess Automation Potential</h3>
+      <p>We analyze your task and show where AI can help most.</p>
+    </div>
+    <div class="feature-card">
+      <h3>30-Day Roadmap</h3>
+      <p>A week-by-week plan to implement automation and track your progress.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Real Tools & Hacks</h3>
+      <p>Get direct links and tutorials for the best AI tools.</p>
+    </div>
+  </section>
+
+  <!-- TASK ASSESSMENT -->
+  <section id="assessment" class="container section">
+    <h2>Task Assessment</h2>
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="industry">Industry</label>
+        <input id="industry" type="text" placeholder="e.g. Marketing, Finance…" />
+      </div>
+      <div class="form-field">
+        <label for="task-description">Task Description</label>
+        <textarea id="task-description" rows="3" placeholder="Describe the task you do…"></textarea>
+      </div>
+      <div class="form-field">
+        <label for="time-spent">Time Spent (hrs/week)</label>
+        <input id="time-spent" type="number" min="0" step="0.5" placeholder="e.g. 5" />
+      </div>
+      <div class="form-field">
+        <label for="current-tools">Current Tools</label>
+        <input id="current-tools" type="text" placeholder="e.g. Excel, Zapier…" />
+      </div>
+      <div class="form-actions">
+        <button id="analyze-button" class="btn-primary">Get AI Analysis</button>
+      </div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+      <span class="spinner"></span> Analyzing…
+    </div>
+    <div id="results" class="results" style="display: none;">
+      <h3>Your Automation Analysis</h3>
+      <div id="results-content"></div>
+    </div>
+  </section>
+
+  <!-- 30-DAY ROADMAP -->
+  <section id="roadmap" class="container section" style="display: none;">
+    <h2>30-Day Automation Roadmap</h2>
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="roadmap-priority">Biggest Challenge</label>
+        <input id="roadmap-priority" type="text" placeholder="e.g. Email overload" />
+      </div>
+      <div class="form-field">
+        <label for="roadmap-skill">Your AI Skill Level</label>
+        <select id="roadmap-skill">
+          <option value="" disabled selected>Select skill level</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="roadmap-budget">Budget</label>
+        <input id="roadmap-budget" type="text" placeholder="e.g. $0 – $50/month" />
+      </div>
+      <div class="form-field">
+        <label for="roadmap-time">Time Available (hrs/week)</label>
+        <input id="roadmap-time" type="number" min="0" step="0.5" placeholder="e.g. 3" />
+      </div>
+      <div class="form-actions">
+        <button id="generate-roadmap" class="btn-primary">Generate My Roadmap</button>
+      </div>
+    </div>
+
+    <div id="roadmap-loading" class="loading" style="display: none;">
+      <span class="spinner"></span> Generating…
+    </div>
+    <div id="roadmap-results" class="roadmap-results" style="display: none;">
+      <h3>Your 30-Day Plan</h3>
+      <div id="roadmap-content" class="timeline"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer container">
+    <p>© 2025 Toilsome. All rights reserved.</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('analyze-button')
+              .addEventListener('click', analyzeTask);
+      document.getElementById('generate-roadmap')
+              .addEventListener('click', generateRoadmap);
+    });
+
+    async function analyzeTask() {
+      const btn      = document.getElementById('analyze-button');
+      const loader   = document.getElementById('loading');
+      const results  = document.getElementById('results');
+      const output   = document.getElementById('results-content');
+
+      const industry     = document.getElementById('industry').value.trim();
+      const task         = document.getElementById('task-description').value.trim();
+      const timeSpent    = document.getElementById('time-spent').value.trim();
+      const currentTools = document.getElementById('current-tools').value.trim();
+
+      if (!industry || !task || !timeSpent) {
+        alert('Please complete all required fields.');
+        return;
+      }
+
+      btn.disabled = true;
+      loader.style.display = 'flex';
+      results.style.display = 'none';
+
+      try {
+        const resp = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ industry, task, timeSpent, currentTools })
+        });
+        const { analysis, error } = await resp.json();
+        if (error) throw new Error(error);
+
+        output.innerHTML = analysis;
+        results.style.display = 'block';
+
+        // Reveal roadmap section after analysis
+        document.getElementById('roadmap').style.display = 'block';
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        loader.style.display = 'none';
+      }
+    }
+
+    async function generateRoadmap() {
+      const btn      = document.getElementById('generate-roadmap');
+      const loader   = document.getElementById('roadmap-loading');
+      const results  = document.getElementById('roadmap-results');
+      const output   = document.getElementById('roadmap-content');
+
+      const priority = document.getElementById('roadmap-priority').value.trim();
+      const skill    = document.getElementById('roadmap-skill').value;
+      const budget   = document.getElementById('roadmap-budget').value.trim();
+      const time     = document.getElementById('roadmap-time').value.trim();
+
+      if (!priority || !skill || !budget || !time) {
+        alert('Please fill out all fields before generating your roadmap.');
+        return;
+      }
+
+      btn.disabled = true;
+      loader.style.display = 'flex';
+      results.style.display = 'none';
+
+      try {
+        const resp = await fetch('/api/roadmap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ priority, skill, budget, time })
+        });
+        const { roadmap, error } = await resp.json();
+        if (error) throw new Error(error);
+
+        // Build timeline
+        let html = '';
+        Object.values(roadmap).forEach((week, idx) => {
+          html += `
+            <div class="timeline-item">
+              <div class="timeline-marker">${idx + 1}</div>
+              <div class="timeline-details">
+                <h4>${week.title}</h4>
+                <p>${week.description}</p>
+                <ul>
+                  ${week.tasks.map(t => `<li>${t}</li>`).join('')}
+                </ul>
+                <span class="badge badge-${week.priority}">${week.priority}</span>
+              </div>
+            </div>`;
+        });
+
+        output.innerHTML = html;
+        results.style.display = 'block';
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        loader.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
