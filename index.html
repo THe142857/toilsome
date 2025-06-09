@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workday Optimizer</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen bg-white grid-background">
+    <div class="relative z-10 max-w-7xl mx-auto p-6">
+        <!-- Hero Header -->
+        <div class="text-center mb-12 pt-8">
+            <div class="inline-flex items-center gap-3 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl px-6 py-3 mb-6 shadow-sm">
+                <i data-lucide="brain" class="w-6 h-6 text-green-600"></i>
+                <span class="text-gray-600 font-medium">AI-Powered Productivity</span>
+                <i data-lucide="sparkles" class="w-5 h-5 text-green-500"></i>
+            </div>
+            <h1 class="text-6xl font-black text-gray-900 mb-4">
+                Workday Optimizer
+            </h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                Identify toilsome tasks that AI could handle, freeing you up for higher-value activities. 
+                <span class="text-green-600 font-semibold"> Get massive alpha by being first in your field.</span>
+            </p>
+            <div class="mt-4 text-sm text-gray-500">
+                <p>Advanced AI Analysis & Automation Recommendations</p>
+                <div class="flex items-center justify-center gap-4 mt-2">
+                    <a href="https://x.com/toilsomeapp" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                        <i data-lucide="twitter" class="w-4 h-4"></i>
+                    </a>
+                    <a href="https://github.com/THe142857" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                        <i data-lucide="github" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-200 overflow-hidden">
+            <!-- Add Activity Section -->
+            <div class="bg-gray-50/80 backdrop-blur-sm p-8 border-b border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <div class="bg-green-600 p-2 rounded-xl">
+                        <i data-lucide="plus" class="w-6 h-6 text-white"></i>
+                    </div>
+                    Plot Your Workday
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+                    <input
+                        type="text"
+                        id="activityName"
+                        placeholder="What are you working on?"
+                        class="lg:col-span-2 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/90 backdrop-blur-sm"
+                    />
+                    <input
+                        type="time"
+                        id="startTime"
+                        value="09:00"
+                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/90 backdrop-blur-sm"
+                    />
+                    <input
+                        type="time"
+                        id="endTime"
+                        value="10:00"
+                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/90 backdrop-blur-sm"
+                    />
+                    <select
+                        id="category"
+                        class="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all duration-200 bg-white/90 backdrop-blur-sm"
+                    >
+                        <option value="work">Deep Work</option>
+                        <option value="meeting">Meetings</option>
+                        <option value="break">Breaks</option>
+                        <option value="admin">Admin Tasks</option>
+                        <option value="monotonous">Monotonous Tasks</option>
+                        <option value="distraction">Distractions</option>
+                        <option value="commute">Commute</option>
+                    </select>
+                    <button
+                        onclick="addActivity()"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover-scale shadow-md hover:shadow-lg flex items-center gap-2 justify-center"
+                    >
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <!-- Activities Timeline -->
+            <div id="activitiesSection" class="p-8 hidden">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <div class="bg-gray-700 p-2 rounded-xl">
+                        <i data-lucide="clock" class="w-6 h-6 text-white"></i>
+                    </div>
+                    Your Schedule
+                </h2>
+                <div id="activitiesList" class="space-y-4">
+                    <!-- Activities will be added here dynamically -->
+                </div>
+            </div>
+
+            <!-- AI Analysis Button -->
+            <div id="analysisButtonSection" class="p-8 text-center bg-gray-50/80 backdrop-blur-sm hidden">
+                <button
+                    onclick="toggleAnalysis()"
+                    id="analysisButton"
+                    class="bg-green-600 hover:bg-green-700 text-white px-12 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover-scale shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto"
+                >
+                    <div class="bg-white/20 p-2 rounded-lg">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <span id="analysisButtonText">Unleash AI Analysis</span>
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </button>
+                <p class="text-gray-600 mt-3 font-medium">Get personalized insights powered by AI</p>
+            </div>
+
+            <!-- AI Analysis Results -->
+            <div id="analysisResults" class="bg-gray-50/80 backdrop-blur-sm p-8 hidden">
+                <!-- Analysis content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
