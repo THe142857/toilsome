@@ -1,4 +1,4 @@
-# AI Workday Optimizer
+# Toilsome
 
 A modern web application that helps users identify toilsome tasks that AI could handle, freeing them up for higher-value activities. Built with vanilla JavaScript, Tailwind CSS, and featuring AI-powered analysis.
 
