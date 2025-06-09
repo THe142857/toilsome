@@ -1,6 +1,6 @@
 let activities = [];
 let showAnalysis = false;
-const apiKey = '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';
+const apiKey = 'sk-proj-X1vQOyeu-NO0SqJHGEsFqMPjI-B4uzAvvX2N_BGkFJ1ccCWWG_sNSefiXyUe3frhDttbGSEXcdeRRtgNtKFPcTkK4immb5KzcYPIcUL_0RAtIe8TNicA';
 
 const categories = {
     work: { color: 'bg-green-500', label: 'Deep Work' },
